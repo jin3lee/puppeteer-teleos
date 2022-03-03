@@ -1,26 +1,40 @@
 const puppeteer = require('puppeteer');
 const websiteList = [ 
-  'bertramnursing.com',
-'bigspringcenterforskilledcare.com',
-'birchwoodnursing.com',
-'bluebonnetnursing.com',
-'brownwoodrehab.com',
-'buenavidanursing.com',
-'buenavidasanantonio.com',
-'caprocknursing.com',
-'carenursingcenter.com',
-'castlepinesatlufkin.com',
-'cedarcreeknursing.com',
-'centraltexasnursing.com',
-'cherokeerosenursing.com',
-'conchohealthandrehab.com',
-'cottonwoodnursing.com',
-'countryviewnr.com',
-'crossroadsnursingandrehab.com',
-'deeringsnursing.com',
+  'navasotanursing.com',
+'northpointenursing.com',
+'oakridgemanornursing.com',
+'oasisnursing.com',
+'pebblenursing.com',
+'pinetreenursing.com',
+'refugionursing.com',
+'riverccc.com',
+'https://rockcreekhealth.com',
+'sansabarehab.com',
+'sevenoaksnursing.com',
+'siennanursing.com',
+'silvertreenursing.com',
+'skilledcareofmexia.com',
+'slatoncarecenter.com',
+'songbirdnursing.com',
+'southernspecialtynursing.com',
+'stgilesnursing.com',
+'stteresanursing.com',
+'sunflowerparkhealth.com',
+'thearborsnursing.com',
+'atriumofbellmead.com',
+'https://hillsnursing.com',
+'premierofalice.com',
+'rioatmissiontrails.com',
+'twinoakscare.com',
+'universityparknr.com',
+'vidorhealth.com',
+'villatoscanarehab.com',
+'wellingtoncarecenter.com',
+'Westwardtrailsnursing.com/',
+'whisperingpinescare.com',
+'whisperwoodnursing.com'
 ];
 
-// const cars = ["Saab", "Volvo", "BMW"];
 
 (async () => {
 
@@ -40,6 +54,7 @@ const websiteList = [
 
       // email
       await page.waitForSelector("#user_login");
+      await page.waitForTimeout(100);  
       await page.type("#user_login", email);
 
       // password
@@ -52,25 +67,30 @@ const websiteList = [
       await page.waitForSelector(".ab-icon");
       await page.goto(adminPortal + "/nav-menus.php"); 
 
+      var carrotId = await page.evaluate(() => {
+          let carrots = document.querySelectorAll("a.item-edit");
+          return carrots[carrots.length-1].id;
+      });
+
+      var id = carrotId.replaceAll("edit-","");
       // open connect settings arrow
-      await page.waitForSelector("#edit-2256");
-      await page.click("#edit-2256");
-      
-      // change name of connect to care portal
-      await page.waitForTimeout(1500);  
-      await page.click("#edit-menu-item-title-2256");
-      await page.click("#edit-menu-item-title-2256");
+      let connectEditId = "#" + carrotId;
+      await page.click(connectEditId);
+
+
+      // ranme label
+      await page.waitForTimeout(3000);  
+      await page.click("#edit-menu-item-title-" + id);
+      await page.click("#edit-menu-item-title-" + id);
       for(var i = 0; i < 20; i++ ) {
         await page.keyboard.press("Backspace");
       }
-      await page.type("#edit-menu-item-title-2256", "Care Portal");
-      
+      await page.type("#edit-menu-item-title-" + id, "Care Portal");
+
 
       // save menu
-      await page.waitForTimeout(3000);  
       await page.click("#save_menu_footer");
-      await page.waitForTimeout(10000);  
+      await page.waitForTimeout(5000);  
       console.log("COMPLETED ", websiteUrl, "!!!!!!!!!!!!!!!!!!!");
     }
-  //await browser.close();
 })();
